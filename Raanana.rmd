@@ -1,0 +1,41 @@
+---
+title: "Raanana"
+author: "Yaron Mintz"
+date: "July 1, 2020"
+output: 
+  html_document: 
+    keep_md: true
+---
+
+Here you upload and install packages... include=FALSE means you won't see this code chunk in the html file
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.retina=2, fig.path = "README_figs/README-")
+library(rgdal)
+library(ggmap)
+library(mapview)
+library(sf)
+#library(osm)
+library(dplyr)
+library(leaflet)
+```
+
+## R Markdown
+
+Here is the main code
+
+```{r map view, include=TRUE}
+
+mymap <-read_sf("D:/Google Drive/work/raanana/school_area_dissolve/school_area_new.shp")
+LQ_index <- read.csv(file.path("D:/Google Drive/work/raanana/raanana_school", "iq_index_school.csv"))
+raanana_map =  merge(mymap, LQ_index, by = "name")
+
+plot(raanana_map[9:12], key.pos = 1, breaks = "quantile")
+mapview(raanana_map, zcol = "name", legend = TRUE)
+
+raanana_map <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  setView(lng=32.1864444, lat=34.8743838, zoom= 10)
+```
+
+
